@@ -1,0 +1,1 @@
+service.exe --WinRun4J:UnregisterService
