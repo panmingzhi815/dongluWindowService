@@ -1,10 +1,8 @@
 package com.donglu.service;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,18 +28,9 @@ public class ServiceMain extends AbstractService {
 	 * 
 	 */
 	public int startSocket() {
+		ServiceConfig config = ServiceConfig.getInstance();
 		String ip=null;
-		File file = new File("controlIp.txt");
-		if (file.exists()) {
-			try(BufferedReader br=new BufferedReader(new FileReader(file))) {
-				String string = br.readLine();
-				if (string!=null&&string.trim().split("\\.").length==4) {
-					ip=string;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		ip=config.getDeviceIp();
 		System.out.println("ip==="+ip);
 		if (ip!=null) {
 			String localIp = ServiceUtils.getLocalIp();
@@ -52,14 +41,17 @@ public class ServiceMain extends AbstractService {
 					flag = ServiceUtils.sendMsg(ip, ServiceUtils.getSetIpMsg(localIp));
 				}
 			}
+		}else{
+			writerMsg("获取本机ip地址失败");
 		}
 		ServerSocket socket = null;
 		try {
-			socket=new ServerSocket(12345);
+			socket=new ServerSocket(config.getServerPort());
 			while (true) {
 				Socket accept = socket.accept();
 				byte[] b=new byte[40];
 				int read=0;
+				boolean execute=false;
 				try {
 					accept.setSoTimeout(2000);
 					long currentTimeMillis = System.currentTimeMillis();
@@ -73,23 +65,25 @@ public class ServiceMain extends AbstractService {
 					}
 					is.read(b);
 					System.out.println(ServiceUtils.getHexString(b));
-					String s = new String(ServiceUtils.getResultByte(b));
-					s=s.substring(0, s.indexOf(new String(new byte[]{(byte)0xff})));
+					String s = new String(ServiceUtils.getResultByte(b),"GBK");
+					s=s.substring(0, s.indexOf(new String(new byte[]{(byte)0x00})));
 					System.out.println(s);
-					boolean flag=true;
 					if (s.contains("shutdown")) {
-						flag=cmdRun(s);
-					}
-					if (flag) {
-						OutputStream os = accept.getOutputStream();
-						os.write(ServiceUtils.getReturnResult(b, 'y'));
-						os.write(b);
-						os.flush();
+						execute=cmdRun(s);
 					}
 					writerMsg(s);
 				} catch (Exception e) {
 					e.printStackTrace();
 					writerMsg("监听是发生错误："+e.getMessage());
+				}
+				if (execute) {
+					OutputStream os = accept.getOutputStream();
+					os.write(ServiceUtils.getReturnResult(b, 'y'));
+					os.flush();
+				}else{
+					OutputStream os = accept.getOutputStream();
+					os.write(ServiceUtils.getReturnResult(b, 'n'));
+					os.flush();
 				}
 			}
 		} catch (Exception e) {

@@ -21,7 +21,7 @@ public class ServiceUtils {
 	 */
 	public static boolean sendMsg(String ip,byte[] setIpMsg) {
 		try {
-			Socket c=new Socket(ip, 12345);
+			Socket c=new Socket(ip, ServiceConfig.getInstance().getDevicePort());
 			c.setSoTimeout(2000);
 			OutputStream os = c.getOutputStream();
 			os.write(setIpMsg);
