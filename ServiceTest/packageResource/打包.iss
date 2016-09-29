@@ -9,14 +9,14 @@ AppId={{642C9D62-82E5-442F-9DA7-9ECDDEBBE408}
 AppName=dongluService
 AppVersion=1.0
 ;AppVerName=dongluService 1.0
-AppPublisher=我的公司
+AppPublisher=东陆高新实业有限公司
 AppPublisherURL=http://www.example.com/
 AppSupportURL=http://www.example.com/
 AppUpdatesURL=http://www.example.com/
 DefaultDirName={pf}\dongluService
 DefaultGroupName=dongluService
 DisableProgramGroupPage=yes
-OutputBaseFilename=setup
+OutputBaseFilename=控制电脑关机服务
 Compression=lzma
 SolidCompression=yes
 
@@ -29,6 +29,8 @@ Source: "delete.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "run.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "service.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "service.ini"; DestDir: "{app}"; Flags: ignoreversion
+Source: "setip.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "setip.ini"; DestDir: "{app}"; Flags: ignoreversion
 Source: "ServiceTest-0.0.1-SNAPSHOT.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WinRun4J.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "jre\*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -38,5 +40,5 @@ Source: "jre\*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs creat
 Name: "{group}\dongluService"; Filename: "{app}\service.exe"
 
 [Run]
-Filename: "{app}\run.bat";
+Filename: "{app}\setip.exe";
 
