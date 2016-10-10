@@ -29,21 +29,6 @@ public class ServiceMain extends AbstractService {
 	 */
 	public int startSocket() {
 		ServiceConfig config = ServiceConfig.getInstance();
-		String ip=null;
-		ip=config.getDeviceIp();
-		System.out.println("ip==="+ip);
-		if (ip!=null) {
-			String localIp = ServiceUtils.getLocalIp();
-			System.out.println("localIp==="+localIp);
-			if (localIp!=null) {
-				boolean flag = false;
-				while (!flag) {
-					flag = ServiceUtils.sendMsg(ip, ServiceUtils.getSetIpMsg(localIp));
-				}
-			}
-		}else{
-			writerMsg("获取本机ip地址失败");
-		}
 		ServerSocket socket = null;
 		try {
 			socket=new ServerSocket(config.getServerPort());

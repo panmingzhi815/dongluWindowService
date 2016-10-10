@@ -72,6 +72,13 @@ public class SetServiceConfigApp {
 					JOptionPane.showMessageDialog(frame, "ip不正确");
 					return;
 				}
+				boolean setIp = setIp(text);
+				if (!setIp) {
+					JOptionPane.showMessageDialog(frame, "ip设置失败");
+					return;
+				}else{
+					JOptionPane.showMessageDialog(frame, "ip设置成功");
+				}
 				ServiceConfig.getInstance().setDeviceIp(text);
 				File f=new File("run.bat");
 				if (!f.exists()) {
@@ -94,5 +101,19 @@ public class SetServiceConfigApp {
 		});
 		button.setBounds(232, 12, 65, 23);
 		frame.getContentPane().add(button);
+	}
+	
+	public boolean setIp(String ip){
+		if (ip!=null) {
+			String localIp = ServiceUtils.getLocalIp();
+			if (localIp!=null) {
+				boolean flag = ServiceUtils.sendMsg(ip, ServiceUtils.getSetIpMsg(localIp));
+				return flag;
+			}else{
+				JOptionPane.showMessageDialog(frame, "本地ip获取失败");
+				return false;
+			}
+		}
+		return true;
 	}
 }

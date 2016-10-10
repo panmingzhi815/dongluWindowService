@@ -16,7 +16,7 @@ AppUpdatesURL=http://www.example.com/
 DefaultDirName={pf}\dongluService
 DefaultGroupName=dongluService
 DisableProgramGroupPage=yes
-OutputBaseFilename=控制电脑关机服务
+OutputBaseFilename=控制电脑关机服务-1.1
 Compression=lzma
 SolidCompression=yes
 
@@ -34,6 +34,7 @@ Source: "setip.ini"; DestDir: "{app}"; Flags: ignoreversion
 Source: "ServiceTest-0.0.1-SNAPSHOT.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WinRun4J.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "jre\*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "run\*"; DestDir: "{app}\run"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; 注意: 不要在任何共享系统文件上使用“Flags: ignoreversion”
 
 [Icons]
