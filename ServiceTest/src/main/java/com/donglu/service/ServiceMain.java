@@ -29,6 +29,28 @@ public class ServiceMain extends AbstractService {
 	 */
 	public int startSocket() {
 		ServiceConfig config = ServiceConfig.getInstance();
+		String ip=null;
+		ip=config.getDeviceIp();
+		if (ip!=null) {
+			String localIp = ServiceUtils.getLocalIp();
+			if (localIp!=null) {
+				boolean flag = false;
+				while (!flag) {
+					config = ServiceConfig.getInstance();
+					flag = ServiceUtils.sendMsg(ip, ServiceUtils.getSetIpMsg(localIp));
+					writerMsg("设置设备:"+ip+"的服务器ip:"+localIp+"结果为："+flag);
+					if (!flag) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}else{
+				writerMsg("获取本机ip地址失败");
+			}
+		}
 		ServerSocket socket = null;
 		try {
 			socket=new ServerSocket(config.getServerPort());
@@ -49,7 +71,7 @@ public class ServiceMain extends AbstractService {
 						Thread.sleep(10);
 					}
 					is.read(b);
-					System.out.println(ServiceUtils.getHexString(b));
+//					System.out.println(ServiceUtils.getHexString(b));
 					String s = new String(ServiceUtils.getResultByte(b),"GBK");
 					s=s.substring(0, s.indexOf(new String(new byte[]{(byte)0x00})));
 					System.out.println(s);
@@ -101,13 +123,14 @@ public class ServiceMain extends AbstractService {
 	 */
 	public void writerMsg(String s) {
 		try {
-			File f = new File("service_log.txt");
+			Date date = new Date();
+			File f = new File("service_log_"+new SimpleDateFormat("yyyyMM").format(date)+".txt");
 			if (!f.exists()) {
 				f.createNewFile();
 			}
 			FileOutputStream fos = new FileOutputStream(f, true);
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-			fos.write((df.format(new Date()) +"--"+ s+"\t\n").getBytes());
+			fos.write((df.format(date) +"--"+ s+"\t\n").getBytes());
 			fos.close();
 		} catch (Exception e) {
 			e.printStackTrace();

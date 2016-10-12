@@ -8,19 +8,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
+import javax.swing.JPanel;
 
 public class SetServiceConfigApp {
 
 	private JFrame frame;
 	private JTextField textField;
+	private JTextArea textArea;
 
 	/**
 	 * Launch the application.
@@ -50,21 +48,28 @@ public class SetServiceConfigApp {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 338, 86);
+		frame.setBounds(100, 100, 331, 381);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		JPanel panel = new JPanel();
+		panel.setBounds(10, 10, 287, 41);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+		
 		JLabel lblip = new JLabel("设备ip");
-		lblip.setBounds(10, 13, 42, 15);
-		frame.getContentPane().add(lblip);
+		lblip.setBounds(0, 10, 36, 15);
+		panel.add(lblip);
 		
 		textField = new JTextField();
-		textField.setBounds(51, 13, 171, 21);
-		frame.getContentPane().add(textField);
+		textField.setBounds(41, 7, 171, 21);
+		panel.add(textField);
 		textField.setColumns(10);
 		textField.setText(ServiceConfig.getInstance().getDeviceIp());
 		
 		JButton button = new JButton("确定");
+		button.setBounds(222, 6, 65, 23);
+		panel.add(button);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String text = textField.getText();
@@ -84,23 +89,21 @@ public class SetServiceConfigApp {
 				if (!f.exists()) {
 					return;
 				}
-				try(BufferedReader br=new BufferedReader(new FileReader(f))) {
-					List<String> list=new ArrayList<>();
-					String s=null;
-					while ((s=br.readLine())!=null ) {
-						list.add(s);
+				List<String> addService = CmdUtil.addService();
+				if (addService!=null) {
+					for (String string : addService) {
+						textArea.append(string+"\t\n");
 					}
-					for (String string : list) {
-						Runtime.getRuntime().exec(string);
-					}
-					System.exit(0);
-				} catch (IOException e1) {
-					e1.printStackTrace();
 				}
+				JOptionPane.showConfirmDialog(frame, "服务器启动完成");
+				System.exit(0);
 			}
 		});
-		button.setBounds(232, 12, 65, 23);
-		frame.getContentPane().add(button);
+		
+		textArea = new JTextArea();
+		textArea.setWrapStyleWord(true);
+		textArea.setBounds(10, 65, 295, 268);
+		frame.getContentPane().add(textArea);
 	}
 	
 	public boolean setIp(String ip){
