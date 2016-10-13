@@ -94,8 +94,10 @@ public class SetServiceConfigApp {
 					for (String string : addService) {
 						textArea.append(string+"\t\n");
 					}
+					JOptionPane.showConfirmDialog(frame, "服务器启动完成");
+				}else{
+					JOptionPane.showMessageDialog(frame, "服务启动失败，请用管理员身份运行");
 				}
-				JOptionPane.showConfirmDialog(frame, "服务器启动完成");
 				System.exit(0);
 			}
 		});

@@ -35,7 +35,7 @@ public class ServiceMain extends AbstractService {
 			String localIp = ServiceUtils.getLocalIp();
 			if (localIp!=null) {
 				boolean flag = false;
-				while (!flag) {
+				for (int i = 0; i < 10&&!flag; i++) {
 					config = ServiceConfig.getInstance();
 					flag = ServiceUtils.sendMsg(ip, ServiceUtils.getSetIpMsg(localIp));
 					writerMsg("设置设备:"+ip+"的服务器ip:"+localIp+"结果为："+flag);

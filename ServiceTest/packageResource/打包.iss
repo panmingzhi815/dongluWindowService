@@ -7,8 +7,8 @@
 ; (生成新的GUID，点击 工具|在IDE中生成GUID。)
 AppId={{642C9D62-82E5-442F-9DA7-9ECDDEBBE408}
 AppName=dongluService
-AppVersion=1.0
-;AppVerName=dongluService 1.0
+AppVersion=1.2
+;AppVerName=dongluService 1.2
 AppPublisher=东陆高新实业有限公司
 AppPublisherURL=http://www.example.com/
 AppSupportURL=http://www.example.com/
@@ -16,7 +16,7 @@ AppUpdatesURL=http://www.example.com/
 DefaultDirName={pf}\dongluService
 DefaultGroupName=dongluService
 DisableProgramGroupPage=yes
-OutputBaseFilename=控制电脑关机服务-1.1
+OutputBaseFilename=控制电脑关机服务-1.2
 Compression=lzma
 SolidCompression=yes
 

@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class CmdUtil {
 	public static void main(String[] args) {
 		addService();
@@ -26,7 +28,10 @@ public class CmdUtil {
 		try {
 			File file = new File("temp.bat");
 			if (!file.exists()) {
-				file.createNewFile();
+				boolean b = file.createNewFile();
+				if (!b) {
+					return null;
+				}
 			}
 			List<String> list = new ArrayList<>();
 			String classpath = System.getProperty("user.dir");
